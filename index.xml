@@ -2,36 +2,36 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Brett Williams</title>
-    <link>http://example.org/</link>
+    <link>https://bdwillia.github.io/</link>
     <description>Recent content on Brett Williams</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 18 Nov 2020 14:51:48 -0700</lastBuildDate><atom:link href="http://example.org/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 18 Nov 2020 14:51:48 -0700</lastBuildDate><atom:link href="https://bdwillia.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>About</title>
-      <link>http://example.org/about/</link>
+      <link>https://bdwillia.github.io/about/</link>
       <pubDate>Wed, 18 Nov 2020 12:10:25 -0700</pubDate>
       
-      <guid>http://example.org/about/</guid>
+      <guid>https://bdwillia.github.io/about/</guid>
       <description>Hi, I&amp;rsquo;m Brett! I am an embedded software developer from Edmonton AB, Canada. In 2016 I graduated from the University of Alberta, located here in Edmonton, with a BSc. in Electrical Engineering. I have experience developing embedded software for Oil and Gas technology, specifically Burner Management Systems for electronic control of industrial burners.
 I am interested in developing a broader and deeper understanding of the entire hardware and software stack of our computing platforms, from semiconductor physics, digital circuit design, RTL and VLSI, to assembly programming, low level systems programming, algorithms, and beyond.</description>
     </item>
     
     <item>
       <title>Parametric EQ | Audio Plugin</title>
-      <link>http://example.org/projects/parametriceq/</link>
+      <link>https://bdwillia.github.io/projects/parametriceq/</link>
       <pubDate>Tue, 17 Nov 2020 11:21:27 -0700</pubDate>
       
-      <guid>http://example.org/projects/parametriceq/</guid>
+      <guid>https://bdwillia.github.io/projects/parametriceq/</guid>
       <description>Introduction In audio processing, Equalization (EQ) is the process of adjusting the relative balance of frequency components in an audio signal. A Parametric EQ is a type of audio equalizer that allows full control over three components of each filter band in the EQ; frequency, gain, and bandwidth. This can be contrasted against other equalizers like graphical equalizers (which you might find in your car stereo for example) that only provides gain control for bands at a fixed frequency interval and have a fixed bandwidth for each band.</description>
     </item>
     
     <item>
       <title>Vigil | Instrumenting Profiler</title>
-      <link>http://example.org/projects/vigil/</link>
+      <link>https://bdwillia.github.io/projects/vigil/</link>
       <pubDate>Fri, 13 Nov 2020 22:57:24 -0700</pubDate>
       
-      <guid>http://example.org/projects/vigil/</guid>
+      <guid>https://bdwillia.github.io/projects/vigil/</guid>
       <description>Introduction Vigil is a software-based instrumenting trace profiler, providing users the ability to inspect program execution after it has occurred. This allows for detailed analysis of application performance, and increased visibility into what&amp;rsquo;s occurring in their program. This project is very much a work in progress currently!
 Vigil consists of a host application to inspect the execution of a client application, and a portable library (to be utilized by the client application) which interfaces with the host.</description>
     </item>
