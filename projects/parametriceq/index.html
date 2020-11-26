@@ -1,0 +1,380 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Brett Williams">
+    <title>Parametric EQ | Brett Williams</title>
+
+    <link rel="stylesheet"
+          href="/css/style.css"
+          type="text/css">
+    <link rel="stylesheet"
+          href="/css/chroma.css"
+          type="text/css">
+</head>
+
+  <body>
+    <div class="header">
+  <table style="width: 100%">
+    <tbody>
+    <tr>
+      <td>
+        <a class="header_title" href="http://example.org/">Brett Williams</a>
+      </td>
+      <td style="text-align:right; vertical-align: bottom; padding: 0 0 0.2rem 0">
+        
+        
+        
+        
+        
+        
+        
+        
+        
+          
+          <a class="header_link" style=""href="/projects/">Projects</a>
+          
+        
+        
+          
+          <a class="header_link" style=""href="/about/">About</a>
+          
+        
+        
+        
+        
+        
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="content">
+  <div class="content_title">
+    
+    <div style="background:url(/images/parametriceq_preview.png) no-repeat 25.00% 25.00%; background-size: cover">
+      <div class="list_img" style="font-size: 3.0rem; background-color:rgba(0,0,0,0.50);"></div>
+      <div class="content_title_image">Parametric EQ | Audio Plugin</div>
+    </div>
+    
+  </div>
+  <h2 id="introduction">Introduction</h2>
+<p>In audio processing, Equalization (EQ) is the process of adjusting the
+relative balance of frequency components in an audio signal. A
+Parametric EQ is a type of audio equalizer that allows full control
+over three components of each filter band in the EQ; frequency, gain,
+and bandwidth. This can be contrasted against other equalizers like
+graphical equalizers (which you might find in your car stereo for
+example) that only provides gain control for bands at a fixed
+frequency interval and have a fixed bandwidth for each band. This
+makes Parametric EQs a very versatile audio processing tool in the
+studio, from broad stroke frequency adjustments like boosting the bass
+and treble of the master bus for a more exciting mix, or surgically
+cutting harsh resonant frequencies often found in drum cymbals.</p>
+<p>I created a digital Parametric EQ audio plugin for digital audio
+workstations (DAWs) targetting Steinberg&rsquo;s <a href="https://www.steinberg.net/en/company/technologies/vst3.html">Virtual Studio
+Technology</a>
+(VST3) plugin format. This project utilizes <a href="https://github.com/olilarkin/wdl-ol">Oli Larkin&rsquo;s
+edition</a> of the Cockos' IPlug
+audio plugin framework and <a href="https://cairographics.org/">Cairo</a> 2D
+graphics library. This EQ implements Robert Bristow-Johnson&rsquo;s (RBJ)
+<a href="https://music.columbia.edu/pipermail/music-dsp/2001-March/041752.html">biquad
+filters</a>,
+providing a selection of low cut, high cut, low shelf, high shelf, and
+peaking EQ filters, and also allows for an unlimited number of filter
+bands.</p>
+<h2 id="demo">Demo</h2>
+
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+  <iframe src="https://www.youtube.com/embed/M9gJtvfCHVI" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
+</div>
+
+<h2 id="operation">Operation</h2>
+<p>In this plugin, the user has the ability to implement any number of
+digital filters they want to form the overall EQ. Each band has three
+main controls:</p>
+<ul>
+<li>
+<p>The <strong>frequency</strong> of the band, which may mean the center frequency or
+the corner frequency (-3 dB) depending on the filter type</p>
+</li>
+<li>
+<p>The <strong>gain</strong> of the band, which when applicable (depending on
+filter type) will control how much that band is adding or
+subtracting for its bandwidth.</p>
+</li>
+<li>
+<p>The <a href="https://en.wikipedia.org/wiki/Q_factor"><strong>&lsquo;Q&rsquo;</strong></a> of the band
+is a sort of coarse control for bandwidth. This can control how
+wide or narrow the frequency bandwidth is for the peaking filter,
+or emphasize resonant bumps seen in the high/low pass and shelving
+filters.</p>
+</li>
+</ul>
+<p>Bands can be added via ctrl + left clicking, their controls can be
+accessed by clicking the colored circle that&rsquo;s a part of their band,
+and can be deleted by pressing the red &lsquo;x&rsquo; in the corner of their
+controls. The mouse can be used to drag the band around (controlling
+the <strong>&lsquo;freq&rsquo;</strong> by moving along the x-axis, and controlling the
+<strong>&lsquo;gain&rsquo;</strong> by moving along the y-axis). The mouse wheel controls the
+<strong>&lsquo;Q&rsquo;</strong> of the band. All of these parameters can also be accessed by
+the knobs at the bottom of the screen. Additionally, double clicking
+on a band will disable it (which can be seen by it becoming grayed
+out), and won&rsquo;t contribute to the processing of the EQ.</p>
+<h2 id="audio-processing">Audio Processing</h2>
+<p>The RBJ Biquads are a general 2nd order infinite impulse response
+(IIR) digital filter. They are implemented in code with the following
+Direct-Form 1 difference equation:</p>
+<figure>
+  
+  <a href="/images/parametriceq/rbj_direct_form_1.png">
+    <img src="/images/parametriceq/rbj_direct_form_1.png"
+         alt="Direct Form 1"/>
+  </a><figcaption>
+    <a href="/images/parametriceq/rbj_direct_form_1.png">Direct Form 1</a>
+  </figcaption>
+</figure>
+
+<p>IIR filters are characterized by their feedback path (as seen by the
+<strong>y[n-1]</strong> and <strong>y[n-2]</strong> terms) where their impulse response never
+decays to zero. Their computational complexity is (in general)
+significantly lower than their FIR counterparts, requiring fewer
+computations per time step and less memory.</p>
+<p>The various filter coefficients can be computed depending on the
+desired type of filter one wants to implement. More detail on how
+these coefficients are computed can be found in RBJs original post
+<a href="https://music.columbia.edu/pipermail/music-dsp/2001-March/041752.html"><strong>here</strong></a>,
+where he outlines designs for the high/low pass, high/low shelf, and
+peaking filter designs utilized in this project.</p>
+<p>Additionally, this plugin computes the amplitude response of the EQ,
+allowing the user to interact with a visual representation of the
+filters that they have configured.</p>
+<h2 id="equalizer-amplitude-response">Equalizer Amplitude Response</h2>
+<p>The graphical gain vs. frequency plot that the user sees and interacts
+with is produced by computing the amplitude response (or <em>magnitude
+frequency response</em>) portion of a <a href="https://en.wikipedia.org/wiki/Bode_plot">Bode
+Plot</a> for the cascaded filter
+bands configured by the user. The amplitude response provides the
+frequency-gain that the filter applies to an arbitrary input signal as
+a function of frequency. See below for a diagram of the cascaded
+filter stages of the equalizer, where <strong>x[n]</strong> is our time-domain
+input signal, <strong>y[n]</strong> is the time-domain output signal, and <strong>h[n]</strong>
+is the overall time-domain transfer function of the system, made up of
+serially cascaded filter bands each with their own transfer functions.</p>
+<figure>
+  
+  <a href="/images/parametriceq/cascaded_system_overview.png">
+    <img src="/images/parametriceq/cascaded_system_overview.png"
+         alt="System Overview"/>
+  </a><figcaption>
+    <a href="/images/parametriceq/cascaded_system_overview.png">System Overview</a>
+  </figcaption>
+</figure>
+
+<p>Here I will go into some details about how we
+can compute and display the amplitude response for this system.</p>
+<h4 id="frequency-response">Frequency Response</h4>
+<p>First, we will look at computing the frequency response for an
+arbitrary system, and how the amplitude response relates to it. Then
+we can apply it to our biquad filters.</p>
+<p>A discrete time-domain transfer function <strong>h[n]</strong> is related to its
+frequency domain representation <strong>H(z)</strong> through the
+<a href="https://en.wikipedia.org/wiki/Z-transform"><strong>z-transform</strong></a>. A
+discrete linear time-invariant (LTI) system characterized by the
+transfer function <strong>H(z)</strong> has a frequency response given by the
+following (in polar form):</p>
+<figure>
+  
+  <a href="/images/parametriceq/freq_response_def.png">
+    <img src="/images/parametriceq/freq_response_def.png"/>
+  </a>
+</figure>
+
+<p>The amplitude response is given by <strong>|H(ω)|</strong>. Given the
+complex-valued transfer function, this can be computed as follows:</p>
+<figure>
+  
+  <a href="/images/parametriceq/amplitude_response_def.png">
+    <img src="/images/parametriceq/amplitude_response_def.png"/>
+  </a>
+</figure>
+
+<p>Next, we need to compute the overall amplitude response of our
+system. Our system is made up of multiple filters cascaded
+together. Since each one is an LTI system, it is very easy to combine
+them into a manageable result when working in the frequency
+domain. Multiple cascaded LTI systems are characterized by the
+convolution of their discrete-time transfer functions, and
+consequently the multiplication of their frequency domain transfer
+functions:</p>
+<figure>
+  
+  <a href="/images/parametriceq/cascaded_freq_response.png">
+    <img src="/images/parametriceq/cascaded_freq_response.png"/>
+  </a>
+</figure>
+
+<p>Thus, to compute the amplitude response of the cascaded system, we can
+compute the amplitude response of the individual transfer functions
+multiplied together. Finally, we need to convert the gain described as
+a scaling factor into a gain in decibels (dB). This also results in a
+nice little simplification that makes computing the overall amplitude
+response a bit easier, by only needing to add the gains (in dB)
+instead of multiplying the complex-valued results together.</p>
+<figure>
+  
+  <a href="/images/parametriceq/cascaded_amplitude_response_gain.png">
+    <img src="/images/parametriceq/cascaded_amplitude_response_gain.png"/>
+  </a>
+</figure>
+
+<h4 id="response-of-biquad-filters">Response of Biquad Filters</h4>
+<p>The discrete transfer function for each RBJ biquad filter band is
+provided as follows</p>
+<figure>
+  
+  <a href="/images/parametriceq/rbj_transfer_function.png">
+    <img src="/images/parametriceq/rbj_transfer_function.png"/>
+  </a>
+</figure>
+
+<p>Now, we can determine the frequency response of the biquad. We will
+use Euler&rsquo;s formula to expand the complex exponentials into their
+sinusoidal components, and a couple trig identities for
+simplification.</p>
+<figure>
+  
+  <a href="/images/parametriceq/rbj_biquad_freq_response_1.png">
+    <img src="/images/parametriceq/rbj_biquad_freq_response_1.png"/>
+  </a>
+</figure>
+
+<p>Next, we can combine our real and imaginary components to get the
+numerator and denominator into standard form.</p>
+<figure>
+  
+  <a href="/images/parametriceq/rbj_biquad_freq_response_2.png">
+    <img src="/images/parametriceq/rbj_biquad_freq_response_2.png"/>
+  </a>
+</figure>
+
+<p>Now, we are in a little bit of a pickle. We need to get this entire
+expression into standard form so we can use it to compute the
+amplitude response, but the division of two complex numbers makes this
+a bit tricky. We can multiply and divide by the complex conjugate of
+the denominator to get the denominator into a purely real quantity.</p>
+<figure>
+  
+  <a href="/images/parametriceq/rbj_biquad_freq_response_3.png">
+    <img src="/images/parametriceq/rbj_biquad_freq_response_3.png"/>
+  </a>
+</figure>
+
+<p>This is great! Now that we have this in standard form, we can use our
+previous formulas for computing the gain. Then, we need to make a
+substitution for <strong>ω</strong> to convert from angular frequency to discrete
+ordinary frequency <strong>f</strong>.</p>
+<figure>
+  
+  <a href="/images/parametriceq/rbj_biquad_freq_response_4.png">
+    <img src="/images/parametriceq/rbj_biquad_freq_response_4.png"/>
+  </a>
+</figure>
+
+<h4 id="plotting-the-amplitude-response">Plotting the Amplitude Response</h4>
+<p>For this EQ, we want to plot both the amplitude response of each
+individual filter, as well as the response of the whole system. We can
+do this by testing the filters at varying frequency bins (representing
+our x-axis) to compute the gain for each filter at each bin, then
+combine them to compute the overall response of the EQ. Then we can
+plot the gains as a function of frequency to create a visualization of
+each filter band as well as the complete response. We want to display
+our x-axis as a logarithmic scale, so we need to convert our
+x-coordinates to a frequency on a logarithmic scale instead of a
+linear scale. For the sake of simplicity, in the pseudo code example
+below we will create a frequency bin for each pixel on the x-axis, and
+we will also avoid interpolating from bin to bin.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c">
+<span class="kt">float</span> <span class="n">minFreqHz</span> <span class="o">=</span> <span class="mf">20.0f</span><span class="p">;</span>
+<span class="kt">float</span> <span class="n">maxFreqHz</span> <span class="o">=</span> <span class="mf">20000.0f</span><span class="p">;</span>
+<span class="k">for</span><span class="p">(</span><span class="kt">int</span> <span class="n">xPos</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">xPos</span> <span class="o">&lt;</span> <span class="n">width</span><span class="p">;</span> <span class="o">++</span><span class="n">xPos</span><span class="p">)</span> <span class="p">{</span>
+    
+    <span class="kt">float</span> <span class="n">freq</span> <span class="o">=</span> <span class="n">convert_xpos_to_freq_log10</span><span class="p">(</span><span class="n">xPos</span><span class="p">,</span> <span class="n">windowWidth</span><span class="p">,</span> <span class="n">minFreqHz</span><span class="p">,</span> <span class="n">maxFreqHz</span><span class="p">);</span>
+    <span class="kt">float</span> <span class="n">totalMagDB</span> <span class="o">=</span> <span class="mf">0.0f</span><span class="p">;</span>
+    <span class="k">for</span><span class="p">(</span><span class="n">size_t</span> <span class="n">biquadIdx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">biquadIdx</span> <span class="o">&lt;</span> <span class="n">biquads</span><span class="o">-&gt;</span><span class="n">len</span><span class="p">;</span> <span class="o">++</span><span class="n">biquadIdx</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">Biquad</span> <span class="o">*</span><span class="n">biquad</span> <span class="o">=</span> <span class="n">biquads</span> <span class="o">+</span> <span class="n">biquadIdx</span><span class="p">;</span>
+
+        <span class="kt">float</span> <span class="n">magDB</span> <span class="o">=</span> <span class="n">biquad_calc_magdb_at_freq</span><span class="p">(</span><span class="n">biquad</span><span class="p">,</span> <span class="n">freq</span><span class="p">,</span> <span class="n">samplingPeriod</span><span class="p">);</span>
+        <span class="kt">int</span> <span class="n">yPos</span> <span class="o">=</span> <span class="n">convert_magdb_to_ypos</span><span class="p">(</span><span class="n">magDB</span><span class="p">);</span>
+
+        <span class="k">if</span><span class="p">(</span><span class="n">biquad</span><span class="o">-&gt;</span><span class="n">isActive</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">draw_px</span><span class="p">(</span><span class="n">xPos</span><span class="p">,</span> <span class="n">yPos</span><span class="p">,</span> <span class="n">biquad</span><span class="o">-&gt;</span><span class="n">color</span><span class="p">);</span>
+            <span class="n">totalMagDB</span> <span class="o">+=</span> <span class="n">magDB</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+	    <span class="c1">// NOTE(Brett): Doesn&#39;t contribute to total amplitude response
+</span><span class="c1"></span>            <span class="n">draw_px</span><span class="p">(</span><span class="n">xPos</span><span class="p">,</span> <span class="n">yPos</span><span class="p">,</span> <span class="n">COLOR_GREY</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="n">draw_px</span><span class="p">(</span><span class="n">xPos</span><span class="p">,</span> <span class="n">yPos</span><span class="p">,</span> <span class="n">totalResponseColor</span><span class="p">);</span>
+<span class="p">}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p>Where <strong>biquad_calc_magdb_at_freq</strong> computes the gain at the frequency being
+queried.</p>
+<h2 id="future-plans">Future Plans</h2>
+<p>In the future, I would like to add a phase plot for fun. This isn&rsquo;t
+something I&rsquo;ve seen on digital EQs before, and it could be very
+handy. If you aren&rsquo;t listening carefully or don&rsquo;t understand the
+phenomena, filters (depending on the design) can introduce
+frequency-dependent phase shifts, which can create phase cancellation
+between multiple sources that is very difficult to diagnose. This
+will be most commonly encountered when trying to do processing on
+different sources with lots of low frequency information (e.g., kick
+drum and bass guitar) which causes phase cancellation, reducing their
+impact.</p>
+<p>I would also like to try incorporating a live spectrum analyzer, so
+you can see the frequency content of an input source and visualize the
+effect EQ changes are having on the output. This would also give me an
+excuse to try my hand at writing an FFT butterfly from scratch.</p>
+
+</div>
+
+  </body>
+  <div style="padding: 2rem 0 0 0">
+</div>
+<div class="footer">
+</div>
+
+</html>
