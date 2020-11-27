@@ -3,36 +3,41 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://bdwillia.github.io/</loc>
+    <loc>http://brett-williams.net/projects/guitareffects/</loc>
+    <lastmod>2020-11-26T11:49:06-07:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://brett-williams.net/</loc>
     <lastmod>2020-11-18T14:51:48-07:00</lastmod>
   </url>
   
   <url>
-    <loc>https://bdwillia.github.io/projects/</loc>
+    <loc>http://brett-williams.net/projects/</loc>
     <lastmod>2020-11-18T14:30:15-07:00</lastmod>
   </url>
   
   <url>
-    <loc>https://bdwillia.github.io/about/</loc>
+    <loc>http://brett-williams.net/about/</loc>
     <lastmod>2020-11-18T12:10:25-07:00</lastmod>
   </url>
   
   <url>
-    <loc>https://bdwillia.github.io/projects/parametriceq/</loc>
+    <loc>http://brett-williams.net/projects/parametriceq/</loc>
     <lastmod>2020-11-17T11:21:27-07:00</lastmod>
   </url>
   
   <url>
-    <loc>https://bdwillia.github.io/projects/vigil/</loc>
+    <loc>http://brett-williams.net/projects/vigil/</loc>
     <lastmod>2020-11-13T22:57:24-07:00</lastmod>
   </url>
   
   <url>
-    <loc>https://bdwillia.github.io/categories/</loc>
+    <loc>http://brett-williams.net/categories/</loc>
   </url>
   
   <url>
-    <loc>https://bdwillia.github.io/tags/</loc>
+    <loc>http://brett-williams.net/tags/</loc>
   </url>
   
 </urlset>

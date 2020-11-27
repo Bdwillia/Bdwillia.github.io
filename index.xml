@@ -2,36 +2,46 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Brett Williams</title>
-    <link>https://bdwillia.github.io/</link>
+    <link>http://brett-williams.net/</link>
     <description>Recent content on Brett Williams</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 18 Nov 2020 14:51:48 -0700</lastBuildDate><atom:link href="https://bdwillia.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 18 Nov 2020 14:51:48 -0700</lastBuildDate><atom:link href="http://brett-williams.net/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Digital Guitar Effects Processor | Capstone Project</title>
+      <link>http://brett-williams.net/projects/guitareffects/</link>
+      <pubDate>Thu, 26 Nov 2020 11:49:06 -0700</pubDate>
+      
+      <guid>http://brett-williams.net/projects/guitareffects/</guid>
+      <description>Introduction Traditionally, audio effects such as filters, reverbs, delays, distortions, etc., have been implemented using analog circuits. Within the last 15-20 years digital effects have grown substantially in viability and popularity due to the increasing ubiquity of low cost, high performance microprocessors. Digital platforms offer a lot of benefits over their analog counterparts, such as
+ Slimmer form factors One device fulfilling the role of many effects Saving and recalling parameter presets  A typical drawback of digital processing is the latency experienced for live use.</description>
+    </item>
+    
     <item>
       <title>About</title>
-      <link>https://bdwillia.github.io/about/</link>
+      <link>http://brett-williams.net/about/</link>
       <pubDate>Wed, 18 Nov 2020 12:10:25 -0700</pubDate>
       
-      <guid>https://bdwillia.github.io/about/</guid>
+      <guid>http://brett-williams.net/about/</guid>
       <description>Hi, I&amp;rsquo;m Brett! I am an embedded software developer from Edmonton AB, Canada. In 2016 I graduated from the University of Alberta, located here in Edmonton, with a BSc. in Electrical Engineering. I have experience developing embedded software for Oil and Gas technology, specifically Burner Management Systems for electronic control of industrial burners.
 I am interested in developing a broader and deeper understanding of the entire hardware and software stack of our computing platforms, from semiconductor physics, digital circuit design, RTL and VLSI, to assembly programming, low level systems programming, algorithms, and beyond.</description>
     </item>
     
     <item>
       <title>Parametric EQ | Audio Plugin</title>
-      <link>https://bdwillia.github.io/projects/parametriceq/</link>
+      <link>http://brett-williams.net/projects/parametriceq/</link>
       <pubDate>Tue, 17 Nov 2020 11:21:27 -0700</pubDate>
       
-      <guid>https://bdwillia.github.io/projects/parametriceq/</guid>
+      <guid>http://brett-williams.net/projects/parametriceq/</guid>
       <description>Introduction In audio processing, Equalization (EQ) is the process of adjusting the relative balance of frequency components in an audio signal. A Parametric EQ is a type of audio equalizer that allows full control over three components of each filter band in the EQ; frequency, gain, and bandwidth. This can be contrasted against other equalizers like graphical equalizers (which you might find in your car stereo for example) that only provides gain control for bands at a fixed frequency interval and have a fixed bandwidth for each band.</description>
     </item>
     
     <item>
       <title>Vigil | Instrumenting Profiler</title>
-      <link>https://bdwillia.github.io/projects/vigil/</link>
+      <link>http://brett-williams.net/projects/vigil/</link>
       <pubDate>Fri, 13 Nov 2020 22:57:24 -0700</pubDate>
       
-      <guid>https://bdwillia.github.io/projects/vigil/</guid>
+      <guid>http://brett-williams.net/projects/vigil/</guid>
       <description>Introduction Vigil is a software-based instrumenting trace profiler, providing users the ability to inspect program execution after it has occurred. This allows for detailed analysis of application performance, and increased visibility into what&amp;rsquo;s occurring in their program. This project is very much a work in progress currently!
 Vigil consists of a host application to inspect the execution of a client application, and a portable library (to be utilized by the client application) which interfaces with the host.</description>
     </item>

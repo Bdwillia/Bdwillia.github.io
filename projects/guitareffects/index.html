@@ -1,0 +1,270 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Brett Williams">
+    <title>Digital Guitar Effects Processor | Brett Williams</title>
+
+    <link rel="stylesheet"
+          href="/css/style.css"
+          type="text/css">
+    <link rel="stylesheet"
+          href="/css/chroma.css"
+          type="text/css">
+</head>
+
+  <body>
+    <div class="header">
+  <table style="width: 100%">
+    <tbody>
+    <tr>
+      <td>
+        <a class="header_title" href="http://brett-williams.net/">Brett Williams</a>
+      </td>
+      <td style="text-align:right; vertical-align: bottom; padding: 0 0 0.2rem 0">
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+          
+          <a class="header_link" style=""href="/projects/">Projects</a>
+          
+        
+        
+          
+          <a class="header_link" style=""href="/about/">About</a>
+          
+        
+        
+        
+        
+        
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="content">
+  <div class="content_title">
+    
+    <div style="background:url(/images/guitareffects_preview.jpg) no-repeat 25.00% 25.00%; background-size: cover">
+      <div class="list_img" style="font-size: 3.0rem; background-color:rgba(0,0,0,0.50);"></div>
+      <div class="content_title_image">Digital Guitar Effects Processor | Capstone Project</div>
+    </div>
+    
+  </div>
+  <h2 id="introduction">Introduction</h2>
+<p>Traditionally, audio effects such as filters, reverbs, delays,
+distortions, etc., have been implemented using analog circuits. Within
+the last 15-20 years digital effects have grown substantially in
+viability and popularity due to the increasing ubiquity of low cost,
+high performance microprocessors. Digital platforms offer a lot of
+benefits over their analog counterparts, such as</p>
+<ul>
+<li>Slimmer form factors</li>
+<li>One device fulfilling the role of many effects</li>
+<li>Saving and recalling parameter presets</li>
+</ul>
+<p>A typical drawback of digital processing is the latency experienced
+for live use. Depending on the internal signal chain and types of
+effects being implemented, latency can be a big issue, especially if
+you are chaining multiple digital devices together.</p>
+<h4 id="summary">Summary</h4>
+<p>For a university capstone design project, I and two other members
+designed and implemented a digital guitar effects processor from
+scratch. The goal was to create a minimal audio effects processing
+platform for guitars with a high quality audio signal chain. The
+device consisted of three major stages; the hardware input, the
+digital signal processing stage, and the hardware output. This device
+was implemented with Eleven Engineering&rsquo;s XInC2 microprocessor, a
+multithreaded processor capable of performing finite impulse response
+(<a href="https://en.wikipedia.org/wiki/Finite_impulse_response"><strong>FIR</strong></a>)
+filters with its vector processing unit (VPU). The operation of the
+device was controlled through two rotary encoders and user feedback
+was provided with two corresponding LED rings and an LCD screen.</p>
+<p>I was responsible for the firmware on the microprocessor, which
+controlled the digital preamplifier via
+<a href="https://en.wikipedia.org/wiki/Serial_Peripheral_Interface"><strong>SPI</strong></a>,
+interfaced with the A/D and D/A stages using
+<a href="https://en.wikipedia.org/wiki/I%C2%B2S"><strong>I2S</strong></a>, the user interface
+(rotary encoders, LED feedback, and LCD screen), and the audio effects
+processing.</p>
+<figure>
+  
+  <a href="/images/guitareffects/userinterface_photo.jpg">
+    <img src="/images/guitareffects/userinterface_photo.jpg"
+         alt="User Interface"/>
+  </a><figcaption>
+    <a href="/images/guitareffects/userinterface_photo.jpg">User Interface</a>
+  </figcaption>
+</figure>
+
+<p>The project successfully achieved a low noise floor and minimal
+latency from input to output (88 microseconds). Given the limited processing
+power of the microprocessor, we only implemented two audio effects, a
+&lsquo;bit crusher&rsquo;/&lsquo;downsampler&rsquo; effect, and a hard-gate tremolo effect. We
+were unsuccessful in implementing the FIR filters due to configuration
+issues with the VPU. Additionally, due to budget and time constraints,
+only the input and output hardware stages were realized on PCBs. The
+user interface components were implemented on a breadboard, and the
+microprocessor on a development board.</p>
+<h2 id="demo">Demo</h2>
+<h4 id="bitcrushdownsample-effect">Bitcrush/Downsample Effect</h4>
+
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+  <iframe src="https://www.youtube.com/embed/atYjSa_tNho" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
+</div>
+
+<h4 id="hard-gate-tremolo-effect">Hard-gate Tremolo Effect</h4>
+
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+  <iframe src="https://www.youtube.com/embed/ztXb1onu7FE" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
+</div>
+
+<h2 id="technical-design">Technical Design</h2>
+<h3 id="hardware-stages">Hardware Stages</h3>
+<h4 id="input-stage">Input Stage</h4>
+<figure>
+  
+  <a href="/images/guitareffects/hardware_input_schematic.png">
+    <img src="/images/guitareffects/hardware_input_schematic.png"
+         alt="Hardware Input Schematic"/>
+  </a><figcaption>
+    <a href="/images/guitareffects/hardware_input_schematic.png">Hardware Input Schematic</a>
+  </figcaption>
+</figure>
+
+<p>The design begins with a passive, direct input stage. This stage must
+provide high input impedance, and convert a single-ended (unbalanced)
+signal, typical of a guitar input, to differential signal suitable for
+the analog-to-digital (ADC) stage. The design was based on a design
+provided by Jensen for their <a href="https://www.jensen-transformers.com/wp-content/uploads/2014/08/jt-db-e.pdf">JT-DB-E Direct Box Application
+Schematic</a>. The
+input stage included a variable and switchable attentuation pad with a
+high-cut filter switch. An audio transformer was utilized to balance
+the input signal and provides a 12:1 step down, suitable to input to a
+microphone preamplifier. It also provides Faraday shielding to
+minimize noise. The transformer also provides a very high input
+impedance, roughly a 10:1 impedance ratio for the output impedance of
+a typical wound guitar pickup. The high impedance ratio reduces signal
+reflection and guarantee a high quality input signal. Additionally, a
+ground lift was implemented, to optionally help eliminate ground loop
+hum which may occur in certain situations.</p>
+<h4 id="preamplifier">Preamplifier</h4>
+<p>A Texas Instruments PGA2505 digitally controlled microphone
+preamplifier IC was used to amplify the signal to an appropriate
+level, maximizing the signal-to-noise ratio in the digital
+domain. This also allows a microphone-level XLR connection to be
+switched into the circuit. The preamplifier stage is controlled by the
+microprocessor via SPI, controlling the gain.</p>
+<h4 id="ad-input-buffer">A/D Input Buffer</h4>
+<p>A full differential operational amplifier was employed for
+conditioning the signal to be suitable for the A/D converter. The
+design employed was based on the recommended circuit provided by
+Cirrus Logic for the CS5381 A/D converter
+(<a href="https://statics.cirrus.com/pubs/proDatasheet/CS5381_F2.pdf">DS563F2</a>). This
+circuit provides a DC offset such that signal is suitable for the A/D
+0 to 5 V input (centered at 2.5 V). It also limits the peak voltage of
+the input signal to 5 V.</p>
+<p>The TI OPA1641 op amps were chosen to implement this circuit due to
+their high quality and suitability for audio applications with their
+high slew rate.</p>
+<h4 id="ad-and-da-stages">A/D and D/A Stages</h4>
+<p>The Cirrus Logic CS5381 and CS4398 delta-sigma converters were used
+for the A/D and D/A stages, respectively. These companion ICs provide
+up to 192 kHz sampling rate with 24-bit depth. They communicate with
+the microprocessor via I2S serial audio communication. Even though
+only a mono input was implemented for our prototype, in the future the
+input and/or output hardware stages could be modified for stereo audio
+allowing for stereo effects to be employed with these converters.</p>
+<p>The CS5381 comes equipped with a built-in digital anti-alias filter,
+removing the need for an external anti-aliasing filter on the input.</p>
+<h4 id="output-stage">Output Stage</h4>
+<p>Following the DAC, the signal is passed through another fully
+differential buffer/low-pass filter circuit to a 1:1 output
+transformer that converts the signal from differential to
+unbalanced. The buffer circuit was modeled after the differential
+low-pass filter circuit in Cirrus Logic&rsquo;s
+<a href="https://statics.cirrus.com/pubs/proDatasheet/CS5381_F2.pdf">DS568DB1</a>
+evaluation board schematic. The output circuit was designed after the
+<a href="https://www.jensen-transformers.com/wp-content/uploads/2014/08/jt-11p-1.pdf">JT-11P-1</a>
+Balanced Line Level to Unbalanced Guitar Level Converter by
+Jensen. The output transformer also assists in reducing noise in the
+signal by decoupling the output from the rest of the circuit.</p>
+<h3 id="user-interface">User Interface</h3>
+<p>The user interface consisted of two rotary encoders with LED ring
+feedback and an LCD screen. Each encoder interfaced with the
+microprocessor via two GPIOs for rotation information, encoding
+changes in the position via <a href="https://en.wikipedia.org/wiki/Gray_code"><strong>Gray
+Code</strong></a>, and a third GPIO for
+the push button. One of the benefits of rotary encoders is that they
+do not have a rotational limit and encode information based on
+relative changes instead of an absolute position. This circumvents
+issues commonly found with potentiometers in digital applications
+where recalling parameter presets can&rsquo;t actually modify the position
+of the potentiometers, leading to confusing and unwanted
+behaviour. The LED rings were used to display the value of parameters
+configured by the user.</p>
+<p>The push button of one encoder was used to navigate to the main menu
+to select the effect. The push button of the other encoder was used to
+give the user control of the gain on the preamplification stage (basic
+volume control). When an effect was selected (and the user was not
+modifying the input gain) the rotary encoders would allow the user to
+control parameters for that effect.</p>
+<h3 id="digital-signal-processing">Digital Signal Processing</h3>
+<p>The XInC2 microprocessor by Eleven Engineering was used for the
+digital signal processing. It provides a digital audio serial
+interface (DASI) for communication with the A/D and D/A converters via
+I2S. The XInC2 features a hardware multithreaded architecture, i.e.,
+does not run on an operating system. This reduces any processing
+overhead of context switching threads. This is a 16-bit
+microarchitecture, and for the sake of simplicity with prototyping,
+only 16-bit samples were used. It also features a vector processing
+unit (VPU) which implements a free running multitply and accumulate
+unit allowing for hardware accelerated FIR filter processing.</p>
+<p>We had separate hardware threads executing for</p>
+<ul>
+<li>Reading from the DASI input buffer (A/D)</li>
+<li>Writing to the DASI output buffer (D/A)</li>
+<li>User Interface</li>
+<li>Processing Effects</li>
+</ul>
+<h4 id="bitcrushdownsampler">Bitcrush/Downsampler</h4>
+<figure>
+  
+  <a href="/images/guitareffects/bitcrusher_signal_effect.png">
+    <img src="/images/guitareffects/bitcrusher_signal_effect.png"
+         alt="Downsampled Sine Wave From Bitcrusher"/>
+  </a><figcaption>
+    <a href="/images/guitareffects/bitcrusher_signal_effect.png">Downsampled Sine Wave From Bitcrusher</a>
+  </figcaption>
+</figure>
+
+<p>One of the effects implemented was a very simple bitcrush and
+desampler effect. One parameter controlled the truncation of the input
+samples, allowing varying the signal from clean, to something
+resembling retro video game consoles. The other parameter controlled
+an artifical downsampling of the input, resulting in heavy aliasing
+artifacts being introduced and generating some extreme distortion.</p>
+<h4 id="hard-gate-tremolo">Hard-gate Tremolo</h4>
+<p>Another effect was the &lsquo;Kill Switch&rsquo; effect. The input signal is
+simply modulated with a square wave envelope. The two parameters
+control the frequency and the duty cycle of the envelope.</p>
+
+</div>
+
+  </body>
+  <div style="padding: 2rem 0 0 0">
+</div>
+<div class="footer">
+</div>
+
+</html>

@@ -90,6 +90,12 @@ body {
     color: var(--default-text-color);
 }
 
+.email:before {
+    content: attr(foo-email-website) "\0040" attr(foo-email-name);
+    unicode-bidi: bidi-override;
+    direction: rtl;
+}
+
 .header {
     font-family: header;
     margin: 0 auto;
