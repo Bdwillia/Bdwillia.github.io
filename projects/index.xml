@@ -8,6 +8,15 @@
     <language>en-us</language>
     <lastBuildDate>Wed, 18 Nov 2020 14:30:15 -0700</lastBuildDate><atom:link href="https://brett-williams.net/projects/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>FPGA Drum Head Synth</title>
+      <link>https://brett-williams.net/projects/drumheadsynth/</link>
+      <pubDate>Mon, 02 Jan 2023 12:03:59 -0700</pubDate>
+      
+      <guid>https://brett-williams.net/projects/drumheadsynth/</guid>
+      <description>Introduction After studying digital electronics and digital systems design, I set out to implement a real-time parallel hardware solver for the Finite Element Analysis (FEA) of a square drum head on an FPGA, completely from scratch. This device simulates a square drum head being excited by a mallet and produces an audio output in real-time of the drum being struck and decaying. It accomplishes this by computing the solution to the 2D Wave Partial Differential Equation (PDE) in a massively parallel fashion in the FPGA fabric.</description>
+    </item>
+    
+    <item>
       <title>Digital Guitar Effects Processor | Capstone Project</title>
       <link>https://brett-williams.net/projects/guitareffects/</link>
       <pubDate>Thu, 26 Nov 2020 11:49:06 -0700</pubDate>
