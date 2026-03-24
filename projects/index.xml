@@ -41,7 +41,7 @@
       <pubDate>Fri, 13 Nov 2020 22:57:24 -0700</pubDate>
       
       <guid>https://brett-williams.net/projects/vigil/</guid>
-      <description>Introduction Vigil is a software-based instrumenting trace profiler, providing users the ability to inspect program execution after it has occurred. This allows for detailed analysis of application performance, and increased visibility into what&amp;rsquo;s occurring in their program. This project is very much a work in progress currently!
+      <description>Introduction Vigil is a software-based instrumenting trace profiler, providing users the ability to inspect program execution after it has occurred. This allows for detailed analysis of application performance, and increased visibility into what&amp;rsquo;s occurring in their program. This project was very much a proof of concept (and on pause at the moment)!
 Vigil consists of a host application to inspect the execution of a client application, and a portable library (to be utilized by the client application) which interfaces with the host.</description>
     </item>
     

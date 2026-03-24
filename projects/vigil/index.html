@@ -25,29 +25,39 @@
         
         
         
+          
         
+          
         
+          
         
+          
         
-        
-        
-        
-        
-        
+          
         
           
           <a class="header_link" style=""href="/projects/">Projects</a>
           
-        
+          
         
           
           <a class="header_link" style=""href="/about/">About</a>
           
+          
         
+          
         
-        
-        
-        
+          
+          <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="theme_icon">
+              <defs>
+                <mask id="half-mask">
+                  <rect x="0" y="0" width="12" height="24" fill="white" />
+                </mask>
+              </defs>
+              <circle cx="12" cy="12" r="10" fill="currentColor" mask="url(#half-mask)" />
+            </svg>
+        </button>
       </td>
     </tr>
     </tbody>
@@ -62,13 +72,36 @@
       <div class="content_title_image">Vigil | Instrumenting Profiler</div>
     </div>
     
+    
   </div>
+  
+  <div class="toc">
+    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#demo">Demo</a></li>
+    <li><a href="#motivation">Motivation</a></li>
+    <li><a href="#features">Features</a>
+      <ol>
+        <li><a href="#vigil-provides-visuals-for-the-following-information">Vigil provides visuals for the following information</a></li>
+      </ol>
+    </li>
+    <li><a href="#future-plans">Future Plans</a>
+      <ol>
+        <li><a href="#backend-technologynetworking">Backend Technology/Networking</a></li>
+        <li><a href="#user-facing-features">User-facing Features</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+  </div>
+  
   <h2 id="introduction">Introduction</h2>
 <p>Vigil is a software-based instrumenting trace profiler, providing
 users the ability to inspect program execution after it has occurred.
 This allows for detailed analysis of application performance, and
 increased visibility into what&rsquo;s occurring in their program. <strong>This
-project is very much a work in progress currently!</strong></p>
+project was very much a proof of concept (and on pause at the moment)!</strong></p>
 <p>Vigil consists of a host application to inspect the execution of a
 client application, and a portable library (to be utilized by the
 client application) which interfaces with the host. The host
@@ -227,7 +260,7 @@ implement. Currently it feels a bit limited in its capabilities, but
 once I have a more solid technological foundation I plan on iterating
 heavily on the usability aspect, and turning it into a much more
 powerful tool.</p>
-<h4 id="backend-technologynetworking">Backend Technology/Networking</h4>
+<h3 id="backend-technologynetworking">Backend Technology/Networking</h3>
 <ul>
 <li>
 <p>Data compression for network transmission and disk storage.</p>
@@ -244,7 +277,7 @@ running on the same machine.</p>
 the host application</p>
 </li>
 </ul>
-<h4 id="user-facing-features">User-facing Features</h4>
+<h3 id="user-facing-features">User-facing Features</h3>
 <ul>
 <li>
 <p>Source code view in host application, allowing one to directly view
@@ -282,12 +315,12 @@ reopen each session over and over.</p>
 facilitate these comparisons, correlate different runs, etc.</p>
 </li>
 </ul>
-<h3 id="heading"></h3>
 
 </div>
 
   </body>
-  <div style="padding: 2rem 0 0 0">
+  <script src="/js/theme-toggle.js"></script>
+<div style="padding: 2rem 0 0 0">
 </div>
 <div class="footer">
 </div>

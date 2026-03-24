@@ -25,29 +25,39 @@
         
         
         
+          
         
+          
         
+          
         
+          
         
-        
-        
-        
-        
-        
+          
         
           
           <a class="header_link" style=""href="/projects/">Projects</a>
           
-        
+          
         
           
           <a class="header_link" style=""href="/about/">About</a>
           
+          
         
+          
         
-        
-        
-        
+          
+          <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="theme_icon">
+              <defs>
+                <mask id="half-mask">
+                  <rect x="0" y="0" width="12" height="24" fill="white" />
+                </mask>
+              </defs>
+              <circle cx="12" cy="12" r="10" fill="currentColor" mask="url(#half-mask)" />
+            </svg>
+        </button>
       </td>
     </tr>
     </tbody>
@@ -62,7 +72,53 @@
       <div class="content_title_image">FPGA Drum Head Synth</div>
     </div>
     
+    
   </div>
+  
+  <div class="toc">
+    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#introduction">Introduction</a>
+      <ol>
+        <li><a href="#demo">Demo</a></li>
+        <li><a href="#system-overview">System Overview</a></li>
+      </ol>
+    </li>
+    <li><a href="#math-background">Math Background</a></li>
+    <li><a href="#hardware-design">Hardware Design</a>
+      <ol>
+        <li><a href="#compute-engine">Compute Engine</a></li>
+        <li><a href="#timing-analysis">Timing Analysis</a></li>
+        <li><a href="#fixed-point-precision">Fixed Point Precision</a></li>
+      </ol>
+    </li>
+    <li><a href="#verification">Verification</a>
+      <ol>
+        <li><a href="#3x3-grid">3x3 Grid</a></li>
+        <li><a href="#87x87-grid">87x87 Grid</a></li>
+      </ol>
+    </li>
+    <li><a href="#excitation-and-sample-readback-memory">Excitation and Sample Readback Memory</a></li>
+    <li><a href="#vga-scanout">VGA Scanout</a>
+      <ol>
+        <li><a href="#single-beat-pipelined-axi-master">Single Beat Pipelined AXI Master</a></li>
+        <li><a href="#scanout-buffer">Scanout Buffer</a></li>
+        <li><a href="#vga-timing-circuit">VGA Timing Circuit</a></li>
+      </ol>
+    </li>
+    <li><a href="#audio-dac-and-fifo">Audio DAC and FIFO</a></li>
+    <li><a href="#software">Software</a>
+      <ol>
+        <li><a href="#excitation-model">Excitation Model</a></li>
+        <li><a href="#cached-software-rendering">Cached Software Rendering</a></li>
+        <li><a href="#hardware-double-buffering">Hardware Double Buffering</a></li>
+        <li><a href="#sdram-memory-banks">SDRAM Memory Banks</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+  </div>
+  
   <h2 id="introduction">Introduction</h2>
 <p>After studying digital electronics and digital systems design, I set
 out to implement a real-time parallel hardware solver for the Finite
@@ -80,13 +136,13 @@ simulate drum strikes with various parameters at different positions
 on the membrane (using a mouse), and also provides a visualization of
 the membrane excitation by interfacing directly with the RAM blocks in
 the FPGA fabric, which makes for a pretty cool interactive demo!</p>
-<h4 id="demo">Demo</h4>
+<h3 id="demo">Demo</h3>
 
 <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
   <iframe src="https://www.youtube.com/embed/bfbEdqHvn-A" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
 </div>
 
-<h4 id="system-overview">System Overview</h4>
+<h3 id="system-overview">System Overview</h3>
 <p>This project was implemented on a Terasic DE1-SoC Cyclone V
 development kit, which features an embedded Cortex A9 hard processor
 system (HPS). The hardware design was implemented from scratch in VHDL
@@ -261,8 +317,8 @@ writing the current computation, and the results of the previous two
 time steps. i.e., we need three &ldquo;words&rdquo; for each node. So each M10K
 block can store 170 nodes at 18 bits (512 20-bit words), or 85 nodes
 at 27 bits (256 32-bit words).</p>
-<p>Now that we have an idea of the hardware resource budget, we need to
-get an idea for our computational budget.</p>
+<p>Now that we have an idea of the budget for hardware resources, we need
+to get an idea for our computational budget.</p>
 <p><figure>
   
   <a href="/images/drumheadsynth/cyclone_v_dsp_performance.png">
@@ -283,16 +339,16 @@ get an idea for our computational budget.</p>
   </figcaption>
 </figure>
 </p>
-<p>The sampling rate of the audio DAC is 48 KHz, meaning we need to
-produce a new sample every 20,833 ns. Based on the data sheet, the
-limiting factor would be the limiting factor. If we are able to clock
-the system clock at the multiplier performance limit, we will have
+<p>The sampling rate of the audio DAC is 48 KHz, which means we need to
+produce a new sample every 20,833 ns. Based on the data sheet, the DSP
+blocks should be the limiting factor for clock speed. If we are able
+to clock the system clock at the DSP performance limit, we will have
 5979 clock cycles at 18 bits or 5208 clock cycles at 27 bits. And
 remember, this budget is divided across all nodes in the grid. Suppose
 one node takes 20 cycles to compute, then a serial solution would only
 be able to solve 298 nodes per cycle at 18 bits (i.e a ~17x17 grid,
 which is quite small).</p>
-<h4 id="compute-engine">Compute Engine</h4>
+<h3 id="compute-engine">Compute Engine</h3>
 <p>Here is the basic structure of my solution to the problem</p>
 <figure>
   
@@ -352,7 +408,7 @@ I figure it was most efficient to interleave the grids so that the
 offsets just modulate between 0, 1, and 2. Then after all nodes have
 been updated we can swap the offsets, so that [n] takes the [n-2]
 offset, [n-1] takes the [n] offset, and [n-2] takes the [n-1] offset.</p>
-<h4 id="timing-analysis">Timing Analysis</h4>
+<h3 id="timing-analysis">Timing Analysis</h3>
 <p>Timing constraints effectively describe what portions of the design
 will execute at what clock frequencies. The timing constraints is
 utilized by the compiler and impacts how it will utilize resources and
@@ -452,7 +508,7 @@ clock. At this point point timing was successfully met!</p>
   </figcaption>
 </figure>
 
-<h4 id="fixed-point-precision">Fixed Point Precision</h4>
+<h3 id="fixed-point-precision">Fixed Point Precision</h3>
 <p>I ended up choosing 27 bit words using a Q3.24 fixed point format,
 instead of the initially chosen 18 bit words in a Q1.17 format for a
 few reasons. After updating my software simulation to perform
@@ -509,7 +565,7 @@ really bad).</p>
 to fit inside a single M10K memory block per compute engine (8192 bits
 at 32-bits per word, storing 3 grids)</p>
 <h2 id="verification">Verification</h2>
-<h4 id="3x3-grid">3x3 Grid</h4>
+<h3 id="3x3-grid">3x3 Grid</h3>
 <p>In order to verify the hardware implementation, I compared the results
 of the software simulation, hardware simulation, and actual audio
 output from the implementation running on the FPGA. I&rsquo;ll note the
@@ -550,7 +606,7 @@ frequencies do indeed match between the software sim and the hardware sim.</p>
 frequencies of the tone to be at 366.2 Hz and 883.3 Hz. In the actual
 hardware output we can see the fundamental frequencies are measured at
 366 Hz and 879 Hz.</p>
-<h4 id="87x87-grid">87x87 Grid</h4>
+<h3 id="87x87-grid">87x87 Grid</h3>
 <p>Performing the full hardware simulation of such a large grid would be far too time consuming. Here I just compare the
 18 bit fixed point software simulation against the actual hardware synthesis, with rounding enabled.</p>
 <p><figure>
@@ -621,7 +677,7 @@ components to make this happen.</p>
 <li>A scan buffer to buffer each line scanned out to the VGA DAC</li>
 <li>Timing circuit to synchronize the VGA scanout with the monitor</li>
 </ul>
-<h4 id="single-beat-pipelined-axi-master">Single Beat Pipelined AXI Master</h4>
+<h3 id="single-beat-pipelined-axi-master">Single Beat Pipelined AXI Master</h3>
 <p>Each frame has a resolution of 640x480 with a bit depth of 16 bits per
 pixel. In our case the AXI data interface is 32 bits wide, so this
 corresponds to 153600 32-bit words. The VGA pixel clock executes at 25
@@ -643,7 +699,7 @@ signal triggering the AXI Master to begin filling the scanout buffer
 with the next frame by reading from the frame buffer base address. The
 base address is a register programmed by the software application,
 allowing us to implement hardware double buffering.</p>
-<h4 id="scanout-buffer">Scanout Buffer</h4>
+<h3 id="scanout-buffer">Scanout Buffer</h3>
 <p>The scanout buffer is a clock domain crossing (CDC) FIFO written to by
 the AXI Master (system clock) and read from with the VGA clock. Reads
 from the CDC FIFO incur a latency of 2 cycles so the VGA control
@@ -654,7 +710,7 @@ i.e., there are two pixels per word stored in the FIFO. I used a
 &lsquo;phase&rsquo; clock which is simply a clock divider to divide the VGA clock
 in two, to only read one element every two VGA clock cycles, and
 output only the lower or upper 16-bit halfword to the VGA DAC.</p>
-<h4 id="vga-timing-circuit">VGA Timing Circuit</h4>
+<h3 id="vga-timing-circuit">VGA Timing Circuit</h3>
 <p>The VGA timing circuit simply counts VGA clock cycles and controls
 when the HSync, VSync, and Blank signals are high and low. I also
 expose a start of frame (SOF), end of frame (EOF), and an &ldquo;Active
@@ -671,14 +727,14 @@ region (i.e., should be scanning out pixels).</p>
 </figure>
 
 <p>For a 640x480 display at 25 MHz I used the following timing parameters:</p>
-<h5 id="horizontal-timings">Horizontal Timings:</h5>
+<h4 id="horizontal-timings">Horizontal Timings:</h4>
 <ul>
 <li>Sync: 96 Cycles</li>
 <li>Back Porch: 48 Cycles</li>
 <li>Display Interval: 640 Cycles</li>
 <li>Front Porch: 16 Cycles</li>
 </ul>
-<h5 id="vertical-timings">Vertical Timings:</h5>
+<h4 id="vertical-timings">Vertical Timings:</h4>
 <ul>
 <li>Sync Pulse: 2 Lines</li>
 <li>Back Porch: 33 Lines</li>
@@ -780,7 +836,7 @@ and writes out the given per-time-step displacements to the excitation
 grid. It then sleeps for the duration the strike is applied (the
 divided value will will be accumulated per time step per node), then
 it will clear that area in the excitation grid back to zero.</p>
-<h4 id="excitation-model">Excitation Model</h4>
+<h3 id="excitation-model">Excitation Model</h3>
 <p>In order to make this an interactive piece, we need to be able to
 dynamically add energy into the system. A simple model is deployed
 here. When striking the surface of the drum, the stick (mallet) would
@@ -830,7 +886,7 @@ bus slave), we would then need to multiplex the write ports to the
 memories with the Compute Engine to allow it to subtract from the
 pool. This involves a bunch of additional complexity that I was not
 interested in.</p>
-<h4 id="cached-software-rendering">Cached Software Rendering</h4>
+<h3 id="cached-software-rendering">Cached Software Rendering</h3>
 <p>Transferring the video frames to the “video memory” (external SDRAM)
 was taking a lot longer than expected. For reasons I still haven’t
 nailed down, the HPS seems unable to sustain high bandwidth memory
@@ -864,7 +920,7 @@ its hash won’t be changing from frame to frame. Then, when
 transmitting the newest frame to video memory, the hash of each chunk
 can be checked against the one for the previous frame to determine if
 a chunk needs to be retransmitted or not.</p>
-<h4 id="hardware-double-buffering">Hardware Double Buffering</h4>
+<h3 id="hardware-double-buffering">Hardware Double Buffering</h3>
 <p>The cached software rendering was still not quite sufficient in
 reducing the transmission time to reasonable levels for this
 application. Up to this point I was doing what I would call… ‘pseudo
@@ -896,7 +952,7 @@ rendering, as if we were transmitting the entire frame everytime, we
 wouldn’t need to effectively copy the data to both frame buffers. But,
 I think it’s still a savings over all as most of the screen is not
 being interacted with.</p>
-<h4 id="sdram-memory-banks">SDRAM Memory Banks</h4>
+<h3 id="sdram-memory-banks">SDRAM Memory Banks</h3>
 <p>I also have an example to share about acquiring deep knowledge of
 topics and leveraging that for better decision making.</p>
 <p>When I was creating the memory controller from scratch, I was able to
@@ -932,7 +988,8 @@ significant amount of time!</p>
 </div>
 
   </body>
-  <div style="padding: 2rem 0 0 0">
+  <script src="/js/theme-toggle.js"></script>
+<div style="padding: 2rem 0 0 0">
 </div>
 <div class="footer">
 </div>

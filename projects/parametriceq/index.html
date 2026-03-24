@@ -25,29 +25,39 @@
         
         
         
+          
         
+          
         
+          
         
+          
         
-        
-        
-        
-        
-        
+          
         
           
           <a class="header_link" style=""href="/projects/">Projects</a>
           
-        
+          
         
           
           <a class="header_link" style=""href="/about/">About</a>
           
+          
         
+          
         
-        
-        
-        
+          
+          <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="theme_icon">
+              <defs>
+                <mask id="half-mask">
+                  <rect x="0" y="0" width="12" height="24" fill="white" />
+                </mask>
+              </defs>
+              <circle cx="12" cy="12" r="10" fill="currentColor" mask="url(#half-mask)" />
+            </svg>
+        </button>
       </td>
     </tr>
     </tbody>
@@ -62,7 +72,28 @@
       <div class="content_title_image">Parametric EQ | Audio Plugin</div>
     </div>
     
+    
   </div>
+  
+  <div class="toc">
+    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#demo">Demo</a></li>
+    <li><a href="#operation">Operation</a></li>
+    <li><a href="#audio-processing">Audio Processing</a></li>
+    <li><a href="#equalizer-amplitude-response">Equalizer Amplitude Response</a>
+      <ol>
+        <li><a href="#frequency-response">Frequency Response</a></li>
+        <li><a href="#response-of-biquad-filters">Response of Biquad Filters</a></li>
+        <li><a href="#plotting-the-amplitude-response">Plotting the Amplitude Response</a></li>
+      </ol>
+    </li>
+    <li><a href="#future-plans">Future Plans</a></li>
+  </ol>
+</nav>
+  </div>
+  
   <h2 id="introduction">Introduction</h2>
 <p>In audio processing, Equalization (EQ) is the process of adjusting the
 relative balance of frequency components in an audio signal. A
@@ -178,7 +209,7 @@ serially cascaded filter bands each with their own transfer functions.</p>
 
 <p>Here I will go into some details about how we
 can compute and display the amplitude response for this system.</p>
-<h4 id="frequency-response">Frequency Response</h4>
+<h3 id="frequency-response">Frequency Response</h3>
 <p>First, we will look at computing the frequency response for an
 arbitrary system, and how the amplitude response relates to it. Then
 we can apply it to our biquad filters.</p>
@@ -233,7 +264,7 @@ instead of multiplying the complex-valued results together.</p>
   </a>
 </figure>
 
-<h4 id="response-of-biquad-filters">Response of Biquad Filters</h4>
+<h3 id="response-of-biquad-filters">Response of Biquad Filters</h3>
 <p>The discrete transfer function for each RBJ biquad filter band is
 provided as follows</p>
 <figure>
@@ -286,7 +317,7 @@ ordinary frequency <strong>f</strong>.</p>
   </a>
 </figure>
 
-<h4 id="plotting-the-amplitude-response">Plotting the Amplitude Response</h4>
+<h3 id="plotting-the-amplitude-response">Plotting the Amplitude Response</h3>
 <p>For this EQ, we want to plot both the amplitude response of each
 individual filter, as well as the response of the whole system. We can
 do this by testing the filters at varying frequency bins (representing
@@ -376,7 +407,8 @@ excuse to try my hand at writing an FFT butterfly from scratch.</p>
 </div>
 
   </body>
-  <div style="padding: 2rem 0 0 0">
+  <script src="/js/theme-toggle.js"></script>
+<div style="padding: 2rem 0 0 0">
 </div>
 <div class="footer">
 </div>

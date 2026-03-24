@@ -25,29 +25,39 @@
         
         
         
+          
         
+          
         
+          
         
+          
         
-        
-        
-        
-        
-        
+          
         
           
           <a class="header_link" style=""href="/projects/">Projects</a>
           
-        
+          
         
           
           <a class="header_link" style=""href="/about/">About</a>
           
+          
         
+          
         
-        
-        
-        
+          
+          <button id="theme-toggle" aria-label="Toggle dark mode" style="background: none; border: none; cursor: pointer;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="theme_icon">
+              <defs>
+                <mask id="half-mask">
+                  <rect x="0" y="0" width="12" height="24" fill="white" />
+                </mask>
+              </defs>
+              <circle cx="12" cy="12" r="10" fill="currentColor" mask="url(#half-mask)" />
+            </svg>
+        </button>
       </td>
     </tr>
     </tbody>
@@ -62,7 +72,41 @@
       <div class="content_title_image">Digital Guitar Effects Processor | Capstone Project</div>
     </div>
     
+    
   </div>
+  
+  <div class="toc">
+    <nav id="TableOfContents">
+  <ol>
+    <li><a href="#introduction">Introduction</a>
+      <ol>
+        <li><a href="#summary">Summary</a></li>
+      </ol>
+    </li>
+    <li><a href="#demo">Demo</a>
+      <ol>
+        <li><a href="#bitcrushdownsample-effect">Bitcrush/Downsample Effect</a></li>
+        <li><a href="#hard-gate-tremolo-effect">Hard-gate Tremolo Effect</a></li>
+      </ol>
+    </li>
+    <li><a href="#technical-design">Technical Design</a>
+      <ol>
+        <li><a href="#hardware-stages">Hardware Stages</a></li>
+        <li><a href="#input-stage">Input Stage</a></li>
+        <li><a href="#preamplifier">Preamplifier</a></li>
+        <li><a href="#ad-input-buffer">A/D Input Buffer</a></li>
+        <li><a href="#ad-and-da-stages">A/D and D/A Stages</a></li>
+        <li><a href="#output-stage">Output Stage</a></li>
+        <li><a href="#user-interface">User Interface</a></li>
+        <li><a href="#digital-signal-processing">Digital Signal Processing</a></li>
+        <li><a href="#bitcrushdownsampler">Bitcrush/Downsampler</a></li>
+        <li><a href="#hard-gate-tremolo">Hard-gate Tremolo</a></li>
+      </ol>
+    </li>
+  </ol>
+</nav>
+  </div>
+  
   <h2 id="introduction">Introduction</h2>
 <p>Traditionally, audio effects such as filters, reverbs, delays,
 distortions, etc., have been implemented using analog circuits. Within
@@ -79,7 +123,7 @@ benefits over their analog counterparts, such as</p>
 for live use. Depending on the internal signal chain and types of
 effects being implemented, latency can be a big issue, especially if
 you are chaining multiple digital devices together.</p>
-<h4 id="summary">Summary</h4>
+<h3 id="summary">Summary</h3>
 <p>For a university capstone design project, I and two other members
 designed and implemented a digital guitar effects processor from
 scratch. The goal was to create a minimal audio effects processing
@@ -119,13 +163,13 @@ only the input and output hardware stages were realized on PCBs. The
 user interface components were implemented on a breadboard, and the
 microprocessor on a development board.</p>
 <h2 id="demo">Demo</h2>
-<h4 id="bitcrushdownsample-effect">Bitcrush/Downsample Effect</h4>
+<h3 id="bitcrushdownsample-effect">Bitcrush/Downsample Effect</h3>
 
 <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
   <iframe src="https://www.youtube.com/embed/atYjSa_tNho" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
 </div>
 
-<h4 id="hard-gate-tremolo-effect">Hard-gate Tremolo Effect</h4>
+<h3 id="hard-gate-tremolo-effect">Hard-gate Tremolo Effect</h3>
 
 <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
   <iframe src="https://www.youtube.com/embed/ztXb1onu7FE" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
@@ -133,7 +177,7 @@ microprocessor on a development board.</p>
 
 <h2 id="technical-design">Technical Design</h2>
 <h3 id="hardware-stages">Hardware Stages</h3>
-<h4 id="input-stage">Input Stage</h4>
+<h3 id="input-stage">Input Stage</h3>
 <figure>
   
   <a href="/images/guitareffects/hardware_input_schematic.png">
@@ -160,14 +204,14 @@ a typical wound guitar pickup. The high impedance ratio reduces signal
 reflection and guarantee a high quality input signal. Additionally, a
 ground lift was implemented, to optionally help eliminate ground loop
 hum which may occur in certain situations.</p>
-<h4 id="preamplifier">Preamplifier</h4>
+<h3 id="preamplifier">Preamplifier</h3>
 <p>A Texas Instruments PGA2505 digitally controlled microphone
 preamplifier IC was used to amplify the signal to an appropriate
 level, maximizing the signal-to-noise ratio in the digital
 domain. This also allows a microphone-level XLR connection to be
 switched into the circuit. The preamplifier stage is controlled by the
 microprocessor via SPI, controlling the gain.</p>
-<h4 id="ad-input-buffer">A/D Input Buffer</h4>
+<h3 id="ad-input-buffer">A/D Input Buffer</h3>
 <p>A full differential operational amplifier was employed for
 conditioning the signal to be suitable for the A/D converter. The
 design employed was based on the recommended circuit provided by
@@ -179,7 +223,7 @@ the input signal to 5 V.</p>
 <p>The TI OPA1641 op amps were chosen to implement this circuit due to
 their high quality and suitability for audio applications with their
 high slew rate.</p>
-<h4 id="ad-and-da-stages">A/D and D/A Stages</h4>
+<h3 id="ad-and-da-stages">A/D and D/A Stages</h3>
 <p>The Cirrus Logic CS5381 and CS4398 delta-sigma converters were used
 for the A/D and D/A stages, respectively. These companion ICs provide
 up to 192 kHz sampling rate with 24-bit depth. They communicate with
@@ -189,7 +233,7 @@ input and/or output hardware stages could be modified for stereo audio
 allowing for stereo effects to be employed with these converters.</p>
 <p>The CS5381 comes equipped with a built-in digital anti-alias filter,
 removing the need for an external anti-aliasing filter on the input.</p>
-<h4 id="output-stage">Output Stage</h4>
+<h3 id="output-stage">Output Stage</h3>
 <p>Following the DAC, the signal is passed through another fully
 differential buffer/low-pass filter circuit to a 1:1 output
 transformer that converts the signal from differential to
@@ -239,7 +283,7 @@ unit allowing for hardware accelerated FIR filter processing.</p>
 <li>User Interface</li>
 <li>Processing Effects</li>
 </ul>
-<h4 id="bitcrushdownsampler">Bitcrush/Downsampler</h4>
+<h3 id="bitcrushdownsampler">Bitcrush/Downsampler</h3>
 <figure>
   
   <a href="/images/guitareffects/bitcrusher_signal_effect.png">
@@ -256,7 +300,7 @@ samples, allowing varying the signal from clean, to something
 resembling retro video game consoles. The other parameter controlled
 an artifical downsampling of the input, resulting in heavy aliasing
 artifacts being introduced and generating some extreme distortion.</p>
-<h4 id="hard-gate-tremolo">Hard-gate Tremolo</h4>
+<h3 id="hard-gate-tremolo">Hard-gate Tremolo</h3>
 <p>Another effect was the &lsquo;Kill Switch&rsquo; effect. The input signal is
 simply modulated with a square wave envelope. The two parameters
 control the frequency and the duty cycle of the envelope.</p>
@@ -264,7 +308,8 @@ control the frequency and the duty cycle of the envelope.</p>
 </div>
 
   </body>
-  <div style="padding: 2rem 0 0 0">
+  <script src="/js/theme-toggle.js"></script>
+<div style="padding: 2rem 0 0 0">
 </div>
 <div class="footer">
 </div>
