@@ -54,8 +54,12 @@
                 <mask id="half-mask">
                   <rect x="0" y="0" width="12" height="24" fill="white" />
                 </mask>
+                <mask id="half-mask-2">
+                  <rect x="12" y="0" width="12" height="24" fill="white" />
+                </mask>
               </defs>
-              <circle cx="12" cy="12" r="10" fill="currentColor" mask="url(#half-mask)" />
+              <circle cx="12" cy="12" r="10" fill="var(--theme-icon-color1)" mask="url(#half-mask)" />
+              <circle cx="12" cy="12" r="10" fill="var(--theme-icon-color2)" mask="url(#half-mask-2)" />
             </svg>
         </button>
       </td>

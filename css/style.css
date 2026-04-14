@@ -4,7 +4,8 @@
     --bg-color: rgb(255, 255, 255);
     --default-text-color: rgb(0, 0, 0);
     --subtitle-text-color: #444;
-    --theme-icon-color: #161616;
+    --theme-icon-color1: #161616;
+    --theme-icon-color2: #fff9a8;
     --content-width: 40rem;
     --hrule-thickness: .1rem;
 }
@@ -16,7 +17,8 @@
     --bg-color: #161616;
     --default-text-color: #ddd;
     --subtitle-text-color: #999;
-    --theme-icon-color: ##ffe9ad;
+    --theme-icon-color1: #fcd800;
+    --theme-icon-color2: #fcd800;
 }
 
 @font-face {
@@ -223,5 +225,5 @@ body {
 }
 
 .theme_icon {
-    color: var(--theme-icon-color);
+    color: var(--theme-icon-color1);
 }
